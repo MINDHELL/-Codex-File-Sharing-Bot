@@ -73,45 +73,54 @@ async def start_command(client: Client, message: Message):
                 reply_markup = None
 
             if AUTO_DELETE_TIME and AUTO_DELETE_TIME > 0:
-
-                try:
-                    copied_msg_for_deletion = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
-                    if copied_msg_for_deletion:
-                        track_msgs.append(copied_msg_for_deletion)
-                    else:
-                        print("Failed to copy message, skipping.")
-
-                except FloodWait as e:
-                    await asyncio.sleep(e.value)
-                    copied_msg_for_deletion = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
-                    if copied_msg_for_deletion:
-                        track_msgs.append(copied_msg_for_deletion)
-                    else:
-                        print("Failed to copy message after retry, skipping.")
-
-                except Exception as e:
-                    print(f"Error copying message: {e}")
-                    pass
-
-            else:
-                try:
-                    await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
-                    await asyncio.sleep(0.5)
-                except FloodWait as e:
-                    await asyncio.sleep(e.value)
-                    await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
-                except:
-                    pass
-
-        if track_msgs:
-            delete_data = await client.send_message(
-                chat_id=message.from_user.id,
-                text=AUTO_DELETE_MSG.format(time=AUTO_DELETE_TIME)
-            )
-            # Schedule the file deletion task after all messages have been copied
-            asyncio.create_task(delete_file(track_msgs, client, delete_data))
+                
+    try:
+        # Attempt to copy the message to the user's chat
+        copied_msg_for_deletion = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
+        
+        if copied_msg_for_deletion:
+            track_msgs.append(copied_msg_for_deletion)
         else:
-            print("No messages to track for deletion.")
+            print("Failed to copy message, skipping.")
+
+    except FloodWait as e:
+        await asyncio.sleep(e.value)
+        copied_msg_for_deletion = await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
+        if copied_msg_for_deletion:
+            track_msgs.append(copied_msg_for_deletion)
+        else:
+            print("Failed to copy message after retry, skipping.")
+
+    except Exception as e:
+        print(f"Error copying message: {e}")
+        pass
+
+else:
+    try:
+        # If no auto-delete time, just copy the message
+        await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
+        await asyncio.sleep(0.5)
+    except FloodWait as e:
+        await asyncio.sleep(e.value)
+        await msg.copy(chat_id=message.from_user.id, caption=caption, parse_mode=ParseMode.HTML, reply_markup=reply_markup, protect_content=PROTECT_CONTENT)
+    except:
+        pass
+
+# After attempting to copy the message(s), proceed with file deletion
+if track_msgs:
+    delete_data = await client.send_message(
+        chat_id=message.from_user.id,
+        text=AUTO_DELETE_MSG.format(time=AUTO_DELETE_TIME)
+    )
+    # Schedule the file deletion task after all messages have been copied
+    asyncio.create_task(delete_file(track_msgs, client, delete_data))
+else:
+    print("No messages to track for deletion.")
+    
+    # Even if no messages are copied, still schedule deletion, passing an empty list
+    # or a default parameter for the deletion logic
+    await asyncio.sleep(AUTO_DELETE_TIME)  # Wait for the specified auto-delete time
+    await delete_file([], client, None)  # Pass an empty list or default params if no messages were copied
 
         return
     else:
