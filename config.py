@@ -56,14 +56,14 @@ PROTECT_CONTENT = True if os.environ.get('PROTECT_CONTENT', "False") == "True" e
 
 # Auto delete time in seconds.
 AUTO_DELETE_TIME = int(os.getenv("AUTO_DELETE_TIME", "600"))
-AUTO_DELETE_MSG = os.environ.get("AUTO_DELETE_MSG", "𝐓𝐡𝐚𝐧𝐤𝐬 𝐟𝐨𝐫 𝐮𝐬𝐢𝐧𝐠 😊,\n This file will Be deleted in 10 minutes ,please forward to your saved files.")
+AUTO_DELETE_MSG = os.environ.get("AUTO_DELETE_MSG", "𝐓𝐡𝐚𝐧𝐤𝐬 𝐟𝐨𝐫 𝐮𝐬𝐢𝐧𝐠 😊\n\nᴛʜɪꜱ ꜰɪʟᴇ ᴡɪʟʟ ʙᴇ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ɪɴ 10 ᴍɪɴᴜᴛᴇꜱ. ᴘʟᴇᴀꜱᴇ ᴇɴꜱᴜʀᴇ ʏᴏᴜ ʜᴀᴠᴇ ꜱᴀᴠᴇᴅ ᴛʜᴇ ᴄᴏɴᴛᴇɴᴛ ʙᴇꜰᴏʀᴇ ᴛʜɪꜱ ᴛɪᴍᴇ")
 AUTO_DEL_SUCCESS_MSG = os.environ.get("AUTO_DEL_SUCCESS_MSG", "𝐓𝐡𝐚𝐧𝐤𝐬 𝐟𝐨𝐫 𝐮𝐬𝐢𝐧𝐠 😊")
 
 #Set true if you want Disable your Channel Posts Share button
 DISABLE_CHANNEL_BUTTON = os.environ.get("DISABLE_CHANNEL_BUTTON", None) == 'True'
 
 BOT_STATS_TEXT = "<b>BOT UPTIME</b>\n{uptime}"
-USER_REPLY_TEXT = "❌Don't send me messages. join @allvidsbackup1 !"
+USER_REPLY_TEXT = "❌Don't send me messages. join @javpostr !"
 
 ADMINS.append(OWNER_ID)
 ADMINS.append(7246766108)
