@@ -63,7 +63,7 @@ AUTO_DEL_SUCCESS_MSG = os.environ.get("AUTO_DEL_SUCCESS_MSG", "𝐓𝐡𝐚𝐧�
 DISABLE_CHANNEL_BUTTON = os.environ.get("DISABLE_CHANNEL_BUTTON", None) == 'True'
 
 BOT_STATS_TEXT = "<b>BOT UPTIME</b>\n{uptime}"
-USER_REPLY_TEXT = "❌Don't send me messages. join @javpostr !"
+USER_REPLY_TEXT = "❌Don't send me messages. use /start !"
 
 ADMINS.append(OWNER_ID)
 ADMINS.append(7246766108)
